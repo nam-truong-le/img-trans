@@ -1,0 +1,30 @@
+{
+  "name": "img-trans",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/truongln88/img-trans.git"
+  },
+  "author": "Nam Truong Le",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/truongln88/img-trans/issues"
+  },
+  "homepage": "https://github.com/truongln88/img-trans#readme",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "chalk": "^2.3.0",
+    "exif-parser": "^0.1.12",
+    "fs-extra": "^5.0.0",
+    "inquirer": "^5.0.1",
+    "klaw": "^2.1.1",
+    "mocha": "^5.0.0",
+    "moment": "^2.20.1",
+    "winston": "^2.4.0"
+  }
+}
