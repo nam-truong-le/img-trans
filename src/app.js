@@ -3,11 +3,11 @@
 const inquirer = require("inquirer");
 const winston = require("winston");
 const chalk = require("chalk");
-const path = require("path");
+const migration = require("./migration");
 
 (async () => {
     try {
-        const { sourceDirectory, targetDirectory } = await inquirer.prompt([{
+        const { sourceDirectory, targetDirectory, move } = await inquirer.prompt([{
             type: "input",
             name: "sourceDirectory",
             message: "Source directory"
@@ -15,7 +15,14 @@ const path = require("path");
             type: "input",
             name: "targetDirectory",
             message: "Target directory"
+        }, {
+            type: "confirm",
+            name: "move",
+            message: "Move",
+            default: true
         }]);
+
+        await migration.migrate(sourceDirectory, targetDirectory, move);
 
     } catch (error) {
         winston.info(chalk.red(error));
