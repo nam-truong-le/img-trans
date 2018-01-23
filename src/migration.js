@@ -40,16 +40,20 @@ const moveFile = (file, targetFile, move) => {
 const migrateSingleFile = (file, targetDirectory, move) => {
     winston.info(chalk.blue(`Move '${file}' to ${targetDirectory}`));
 
-    const createdDate = metadata.createdDate(file);
-    const year = createdDate.year();
-    const month = createdDate.month();
-    const date = createdDate.date();
+    try {
+        const createdDate = metadata.createdDate(file);
+        const year = createdDate.year();
+        const month = createdDate.month();
+        const date = createdDate.date();
 
-    const finalDirectory = path.join(targetDirectory, `${year}`, `${month + 1}`, `${date}`);
-    fs.ensureDirSync(finalDirectory);
+        const finalDirectory = path.join(targetDirectory, `${year}`, `${month + 1}`, `${date}`);
+        fs.ensureDirSync(finalDirectory);
 
-    const targetFile = path.join(finalDirectory, path.basename(file));
-    moveFile(file, targetFile, move);
+        const targetFile = path.join(finalDirectory, path.basename(file));
+        moveFile(file, targetFile, move);
+    } catch (error) {
+        winston.warn(chalk.yellow(`   skipped because of '${error}'`));
+    }
 };
 
 const migrate = async (sourceDirectory, targetDirectory, move = true) => {

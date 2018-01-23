@@ -12,6 +12,9 @@ const exif = path => {
 const createdDate = path => {
     const tags = exif(path).tags;
     const timeInSecond = tags.DateTimeOriginal || tags.CreateDate;
+    if (!timeInSecond) {
+        throw "'DateTimeOriginal' & 'CreateDate' undefined.";
+    }
     return moment.unix(timeInSecond);
 };
 
