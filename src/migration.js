@@ -6,6 +6,8 @@ const chalk = require("chalk");
 const fs = require("fs-extra");
 const metadata = require("./metadata");
 const path = require("path");
+const PQueue = require("p-queue");
+const queue = new PQueue({concurrency: 1});
 
 const moveFile = (file, targetFile, move) => {
     winston.info(chalk.green(`   targeting '${targetFile}'...`));
@@ -37,11 +39,11 @@ const moveFile = (file, targetFile, move) => {
     }
 };
 
-const migrateSingleFile = (file, targetDirectory, move) => {
+const migrateSingleFile = async (file, targetDirectory, move) => {
     winston.info(chalk.blue(`Move '${file}' to ${targetDirectory}`));
 
     try {
-        const createdDate = metadata.createdDate(file);
+        const createdDate = await metadata.createdDate(file);
         const year = createdDate.year();
         const month = createdDate.month();
         const date = createdDate.date();
@@ -61,15 +63,15 @@ const migrate = async (sourceDirectory, targetDirectory, move = true) => {
 
     return new Promise((resolve, reject) => {
         walk(sourceDirectory)
-            .on("data", item => {
+            .on("data", async item => {
                 if (item.stats.isFile()) {
-                    migrateSingleFile(item.path, targetDirectory, move);
+                    queue.add(() => migrateSingleFile(item.path, targetDirectory, move));
                 }
             })
             .on("end", () => {
-                resolve();
+                queue.onEmpty().then(resolve);
             })
-            .on("error", reject)
+            .on("error", reject);
     });
 };
 

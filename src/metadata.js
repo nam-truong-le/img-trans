@@ -1,21 +1,25 @@
 "use strict";
 
-const exifParser = require("exif-parser");
+const exifTool = require("exiftool");
 const fs = require("fs");
 const moment = require("moment");
 
-const exif = path => {
-    const parser = exifParser.create(fs.readFileSync(path));
-    return parser.parse();
-};
-
 const createdDate = path => {
-    const tags = exif(path).tags;
-    const timeInSecond = tags.DateTimeOriginal || tags.CreateDate;
-    if (!timeInSecond) {
-        throw "'DateTimeOriginal' & 'CreateDate' undefined.";
-    }
-    return moment.unix(timeInSecond);
+    return new Promise((resolve, reject) => {
+        exifTool.metadata(fs.readFileSync(path), (error, metadata) => {
+            if (error) {
+                reject(error);
+            } else {
+                let createdDateString = metadata["date/timeOriginal"];
+
+                if (!createdDateString) {
+                    reject("Could not parse exif info");
+                } else {
+                    resolve(moment.utc(createdDateString, "YYYY:MM:DD HH:mm:ss"));
+                }
+            }
+        });
+    });
 };
 
 module.exports = {
