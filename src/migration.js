@@ -28,7 +28,7 @@ const moveFile = (file, targetFile, move) => {
             const newTargetFile = path.join(path.dirname(targetFile), `${path.basename(targetFile, extension)}_diff${extension}`);
             // files are different but same name
             winston.info(chalk.green(`   rename to ${newTargetFile}`));
-            moveFile(file, newTargetFile);
+            moveFile(file, newTargetFile, move);
         }
     } else {
         if (move) {
