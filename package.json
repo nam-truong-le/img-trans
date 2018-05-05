@@ -17,15 +17,23 @@
   },
   "homepage": "https://github.com/truongln88/img-trans#readme",
   "dependencies": {
+    "async": "^2.6.0",
     "chai": "^4.1.2",
     "chalk": "^2.3.0",
     "exiftool": "0.0.3",
     "fs-extra": "^5.0.0",
+    "hash.js": "^1.1.3",
     "inquirer": "^5.0.1",
     "klaw": "^2.1.1",
+    "lodash": "^4.17.10",
+    "md5.js": "^1.3.4",
     "mocha": "^5.0.0",
     "moment": "^2.20.1",
+    "npm": "^6.0.0",
     "p-queue": "^2.3.0",
     "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
   }
 }
