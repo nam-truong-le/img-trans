@@ -56,7 +56,7 @@ function removeDuplicates(files) {
             });
         }
 
-        LOG.info(`Finished. ${count} files deleted.`);
+        LOG.info(`Finished. ${count} files deleted from ${files.length}.`);
 
         resolve();
     });

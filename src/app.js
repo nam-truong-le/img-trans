@@ -5,7 +5,7 @@ const winston = require("winston");
 const chalk = require("chalk");
 const migration = require("./migration");
 
-(async () => {
+module.exports = async () => {
     try {
         const { sourceDirectory, targetDirectory, move } = await inquirer.prompt([{
             type: "input",
@@ -27,4 +27,4 @@ const migration = require("./migration");
     } catch (error) {
         winston.info(chalk.red(error));
     }
-})();
+};
