@@ -35,4 +35,9 @@ describe("metadata", () => {
         winston.info(chalk.gray(JSON.stringify(createdDate)));
         createdDate.format().should.equal("2018-11-14T22:14:34Z");
     });
+
+    it("mp4", async () => {
+        const createdDate = await metadata.createdDate(path.join(__dirname, "data/test1.MP4"));
+        createdDate.format().should.equal("2018-01-24T17:31:12Z");
+    })
 });
