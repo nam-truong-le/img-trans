@@ -2,6 +2,7 @@ metadata:
   createDateTags:
     - "date/timeOriginal"
     - "createDate"
+    - "dateCreated"
   allowedFileTypes:
     - "JPEG"
     - "ARW"

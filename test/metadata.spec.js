@@ -40,4 +40,9 @@ describe("metadata", () => {
         const createdDate = await metadata.createdDate(path.join(__dirname, "data/test1.MP4"));
         createdDate.format().should.equal("2018-01-24T17:31:12Z");
     })
+
+    it("png", async () => {
+        const createdDate = await metadata.createdDate(path.join(__dirname, "data/IMG_5147.PNG"));
+        createdDate.format().should.equal("2018-01-27T15:24:10Z");
+    });
 });
