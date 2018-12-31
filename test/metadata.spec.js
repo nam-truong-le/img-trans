@@ -29,4 +29,10 @@ describe("metadata", () => {
             return Promise.resolve();
         }
     });
+
+    it("mov", async () => {
+        const createdDate = await metadata.createdDate(path.join(__dirname, "data/IMG_0624.MOV"));
+        winston.info(chalk.gray(JSON.stringify(createdDate)));
+        createdDate.format().should.equal("2018-11-14T22:14:34Z");
+    });
 });

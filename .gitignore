@@ -1,6 +1,8 @@
+.vscode
 .idea
 package-lock.json
 test/data_migrated
+.DS_Store
 
 # Logs
 logs

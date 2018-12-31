@@ -64,8 +64,10 @@ const migrate = async (sourceDirectory, targetDirectory, move = true) => {
     return new Promise((resolve, reject) => {
         walk(sourceDirectory)
             .on("data", async item => {
-                if (item.stats.isFile()) {
+                if (item.stats.isFile() && !path.basename(item.path).startsWith("._")) {
                     queue.add(() => migrateSingleFile(item.path, targetDirectory, move));
+                } else {
+                    winston.info(`ignore file '${item.path}'`);
                 }
             })
             .on("end", () => {
