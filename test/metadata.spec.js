@@ -45,4 +45,9 @@ describe("metadata", () => {
         const createdDate = await metadata.createdDate(path.join(__dirname, "data/IMG_5147.PNG"));
         createdDate.format().should.equal("2018-01-27T15:24:10Z");
     });
+
+    it("heic", async () => {
+        const createdDate = await metadata.createdDate(path.join(__dirname, "data/IMG_0001.HEIC"));
+        createdDate.format().should.equal("2018-10-13T15:32:17Z");
+    });
 });
