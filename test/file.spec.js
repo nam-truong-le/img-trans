@@ -15,8 +15,6 @@ const targetPath2 = path.join(TEMP_DIR, "target", "foo_diff_diff.txt");
 describe("file", () => {
     beforeEach(() => {
         fs.removeSync(TEMP_DIR);
-        fs.ensureDirSync(path.join(TEMP_DIR, "source"));
-        fs.ensureDirSync(path.join(TEMP_DIR, "target"));
     });
 
     afterEach(() => {
@@ -24,7 +22,7 @@ describe("file", () => {
     });
 
     it("target not exist", () => {
-        fs.writeFileSync(sourcePath, "Foo");
+        fs.outputFileSync(sourcePath, "Foo");
 
         fileUtils.moveFile(sourcePath, targetPath);
         fs.readFileSync(targetPath).toString().should.equal("Foo");
@@ -32,7 +30,7 @@ describe("file", () => {
     });
 
     it("only copy", () => {
-        fs.writeFileSync(sourcePath, "Foo");
+        fs.outputFileSync(sourcePath, "Foo");
 
         fileUtils.moveFile(sourcePath, targetPath, false);
         fs.readFileSync(targetPath).toString().should.equal("Foo");
@@ -40,8 +38,8 @@ describe("file", () => {
     });
 
     it("target exists, same file", () => {
-        fs.writeFileSync(sourcePath, "Foo");
-        fs.writeFileSync(targetPath, "Foo");
+        fs.outputFileSync(sourcePath, "Foo");
+        fs.outputFileSync(targetPath, "Foo");
 
         fileUtils.moveFile(sourcePath, targetPath);
         fs.readFileSync(targetPath).toString().should.equal("Foo");
@@ -49,14 +47,30 @@ describe("file", () => {
     });
 
     it("target exists, different file", () => {
-        fs.writeFileSync(sourcePath, "Foo");
-        fs.writeFileSync(targetPath, "Bar");
-        fs.writeFileSync(targetPath1, "Boo");
+        fs.outputFileSync(sourcePath, "Foo");
+        fs.outputFileSync(targetPath, "Bar");
+        fs.outputFileSync(targetPath1, "Boo");
 
         fileUtils.moveFile(sourcePath, targetPath);
         fs.readFileSync(targetPath).toString().should.equal("Bar");
         fs.readFileSync(targetPath1).toString().should.equal("Boo");
         fs.readFileSync(targetPath2).toString().should.equal("Foo");
         fs.existsSync(sourcePath).should.equal(false);
+    });
+
+    it("process files", async () => {
+        fs.outputFileSync(path.join(TEMP_DIR, "source", "dir1", "foo.txt"), "Foo");
+        fs.outputFileSync(path.join(TEMP_DIR, "source", "dir2", "bar.txt"), "Bar");
+        fs.outputFileSync(path.join(TEMP_DIR, "source", "dir2", ".ignore.txt"), "Ignore");
+
+        const processed = [];
+        await fileUtils.processFiles(path.join(TEMP_DIR, "source"), filePath => function(done) {
+            processed.push(filePath);
+            done();
+        });
+
+        processed.length.should.equal(2);
+        processed.includes(path.join(TEMP_DIR, "source", "dir1", "foo.txt")).should.equal(true);
+        processed.includes(path.join(TEMP_DIR, "source", "dir2", "bar.txt")).should.equal(true);
     });
 });

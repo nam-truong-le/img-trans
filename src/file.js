@@ -4,9 +4,12 @@ const winston = require("winston");
 const chalk = require("chalk");
 const fs = require("fs-extra");
 const path = require("path");
+const walk = require("klaw");
+const async = require("async");
 
 module.exports = {
-    moveFile
+    moveFile,
+    processFiles
 };
 
 function moveFile(filePath, targetFilePath, move = true) {
@@ -37,4 +40,30 @@ function moveFile(filePath, targetFilePath, move = true) {
             fs.copySync(filePath, targetFilePath);
         }
     }
+}
+
+async function processFiles(dirPath, processFactory) {
+    const files = [];
+    await new Promise((resolve, reject) => {
+        walk(dirPath)
+            .on("data", item => {
+                if (item.stats.isFile() && !path.basename(item.path).startsWith(".")) {
+                    files.push(item.path);
+                }
+            })
+            .on("end", () => {
+                resolve();
+            })
+            .on("error", reject);
+    });
+
+    await new Promise((resolve, reject) => {
+        async.series(files.map(processFactory), (error) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve();
+            }
+        });
+    });
 }
