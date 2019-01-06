@@ -47,23 +47,22 @@ async function processDirectories(dirPath, processFactory) {
     await _processItems(dirPath, item => item.stats.isDirectory(), processFactory);
 }
 
-async function processFiles(dirPath, processFactory) {
-    await _processItems(dirPath, item => item.stats.isFile() && !path.basename(item.path).startsWith("."), processFactory);
+async function processFiles(dirPath, processFactory, depthLimit) {
+    await _processItems(dirPath, item => item.stats.isFile() && !path.basename(item.path).startsWith("."), processFactory, depthLimit);
 }
 
-async function _processItems(dirPath, filter, processFactory) {
+async function _processItems(dirPath, filter, processFactory, depthLimit) {
     const items = [];
     await new Promise((resolve, reject) => {
-        walk(dirPath)
-            .on("data", item => {
-                if (filter(item)) {
-                    items.push(item.path);
-                }
-            })
-            .on("end", () => {
-                resolve();
-            })
-            .on("error", reject);
+        walk(dirPath, {
+            depthLimit
+        }).on("data", item => {
+            if (filter(item)) {
+                items.push(item.path);
+            }
+        }).on("end", () => {
+            resolve();
+        }).on("error", reject);
     });
 
     await new Promise((resolve, reject) => {
