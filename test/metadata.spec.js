@@ -23,7 +23,7 @@ describe("metadata", () => {
 
     it("pdf", async () => {
         try {
-            const createdDate = await metadata.createdDate(path.join(__dirname, "data/perfect.pdf"));
+            await metadata.createdDate(path.join(__dirname, "data/perfect.pdf"));
             return Promise.reject("Should reject");
         } catch (error) {
             return Promise.resolve();
@@ -39,7 +39,7 @@ describe("metadata", () => {
     it("mp4", async () => {
         const createdDate = await metadata.createdDate(path.join(__dirname, "data/test1.MP4"));
         createdDate.format().should.equal("2018-01-24T17:31:12Z");
-    })
+    });
 
     it("png", async () => {
         const createdDate = await metadata.createdDate(path.join(__dirname, "data/IMG_5147.PNG"));
