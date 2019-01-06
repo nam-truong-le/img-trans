@@ -23,7 +23,11 @@ describe("remove duplicate", () => {
         fs.outputFileSync(path.join(TEMP_DIR, "bar1.txt"), "Bar");
         fs.outputFileSync(path.join(TEMP_DIR, "boo.txt"), "Boo");
 
-        await removeDuplicate.removeDuplicate(TEMP_DIR);
+        const result = await removeDuplicate.removeDuplicate(TEMP_DIR);
+
+        result.path.should.equal(TEMP_DIR);
+        result.removed.should.equal(3);
+        result.total.should.equal(6);
 
         let foo = 0;
         ["foo.txt", "foo1.txt", "foo2.txt"].forEach(f => fs.existsSync(path.join(TEMP_DIR, f)) && (foo++));

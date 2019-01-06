@@ -39,4 +39,9 @@ async function removeDuplicate(dirPath) {
     }
 
     winston.info(`   Finished. ${count} files deleted from ${files.length}.`);
+    return {
+        path: dirPath,
+        removed: count,
+        total: files.length
+    };
 }

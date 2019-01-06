@@ -3,6 +3,7 @@
 package-lock.json
 test/data_migrated
 .DS_Store
+target/
 
 # Logs
 logs
