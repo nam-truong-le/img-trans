@@ -5,6 +5,7 @@ const MD5 = require("md5.js");
 const winston = require("winston");
 const fs = require("fs-extra");
 const _ = require("lodash");
+const chalk = require("chalk");
 
 module.exports = {
     removeDuplicate
@@ -28,9 +29,9 @@ async function removeDuplicate(dirPath) {
         winston.info(`   process hash ${hash}`);
         filesGroupByHash[hash].forEach((f, i) => {
             if (i === 0) {
-                winston.info(`    keep ${f.path}`);
+                winston.info(`      keep ${f.path}`);
             } else {
-                winston.info(`    delete ${f.path}`);
+                winston.info(chalk.yellow(`      delete ${f.path}`));
                 fs.removeSync(f.path);
                 count++;
             }
