@@ -5,7 +5,8 @@ const LOG = require("winston");
 
 const P_MAP = new Map([
     ["Transport images", "./src/app.js"],
-    ["Remove duplicates", "./src/clean.js"]
+    ["Remove duplicates", "./src/clean.js"],
+    ["Find defects", "./src/app/find-defect.js"]
 ]);
 
 (async function() {
