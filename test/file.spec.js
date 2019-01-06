@@ -73,4 +73,22 @@ describe("file", () => {
         processed.includes(path.join(TEMP_DIR, "source", "dir1", "foo.txt")).should.equal(true);
         processed.includes(path.join(TEMP_DIR, "source", "dir2", "bar.txt")).should.equal(true);
     });
+
+    it("process directories", async () => {
+        fs.mkdirpSync(path.join(TEMP_DIR, "a", "b", "c"));
+        fs.mkdirpSync(path.join(TEMP_DIR, "a", "e"));
+
+        const processed = [];
+        await fileUtils.processDirectories(TEMP_DIR, dirPath => function(done) {
+            processed.push(dirPath);
+            done();
+        });
+
+        processed.length.should.equal(5);
+        processed.includes(path.join(TEMP_DIR)).should.equal(true);
+        processed.includes(path.join(TEMP_DIR, "a")).should.equal(true);
+        processed.includes(path.join(TEMP_DIR, "a", "b")).should.equal(true);
+        processed.includes(path.join(TEMP_DIR, "a", "b", "c")).should.equal(true);
+        processed.includes(path.join(TEMP_DIR, "a", "e")).should.equal(true);
+    });
 });

@@ -9,7 +9,8 @@ const async = require("async");
 
 module.exports = {
     moveFile,
-    processFiles
+    processFiles,
+    processDirectories
 };
 
 function moveFile(filePath, targetFilePath, move = true) {
@@ -42,13 +43,21 @@ function moveFile(filePath, targetFilePath, move = true) {
     }
 }
 
+async function processDirectories(dirPath, processFactory) {
+    await _processItems(dirPath, item => item.stats.isDirectory(), processFactory);
+}
+
 async function processFiles(dirPath, processFactory) {
-    const files = [];
+    await _processItems(dirPath, item => item.stats.isFile() && !path.basename(item.path).startsWith("."), processFactory);
+}
+
+async function _processItems(dirPath, filter, processFactory) {
+    const items = [];
     await new Promise((resolve, reject) => {
         walk(dirPath)
             .on("data", item => {
-                if (item.stats.isFile() && !path.basename(item.path).startsWith(".")) {
-                    files.push(item.path);
+                if (filter(item)) {
+                    items.push(item.path);
                 }
             })
             .on("end", () => {
@@ -58,7 +67,7 @@ async function processFiles(dirPath, processFactory) {
     });
 
     await new Promise((resolve, reject) => {
-        async.series(files.map(processFactory), (error) => {
+        async.series(items.map(processFactory), (error) => {
             if (error) {
                 reject(error);
             } else {
