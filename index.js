@@ -4,7 +4,7 @@ const inquirer = require("inquirer");
 const LOG = require("winston");
 
 const P_MAP = new Map([
-    ["Transport images", "./src/app.js"],
+    ["Transport images", "./src/app/migration.js"],
     ["Remove duplicates", "./src/clean.js"],
     ["Find defects", "./src/app/find-defect.js"]
 ]);

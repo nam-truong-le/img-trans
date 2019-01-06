@@ -3,7 +3,7 @@
 const inquirer = require("inquirer");
 const winston = require("winston");
 const chalk = require("chalk");
-const migration = require("./migration");
+const migration = require("../migration");
 
 module.exports = async () => {
     try {
